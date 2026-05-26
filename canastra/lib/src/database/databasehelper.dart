@@ -33,7 +33,7 @@ class DatabaseHelper {
 
   Future<int> insertPartida(Partida partida) async {
     final db = await database;
-    return await db.insert('partidas', partida.toMap());
+    return await db.insert('partidas', partida.toMapWithoutId());
   }
 
   Future<List<Partida>> getPartidas() async {
@@ -48,5 +48,19 @@ class DatabaseHelper {
   Future<void> deletePartida(int id) async {
     final db = await database;
     await db.delete('partidas', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<void> updatePartida(Partida partida) async {
+    if (partida.id == null) {
+      throw ArgumentError('partida.id is required to update');
+    }
+
+    final db = await database;
+    await db.update(
+      'partidas',
+      partida.toMapWithoutId(),
+      where: 'id = ?',
+      whereArgs: [partida.id],
+    );
   }
 }

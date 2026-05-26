@@ -20,6 +20,14 @@ class Partida {
     };
   }
 
+  Map<String, dynamic> toMapWithoutId() {
+    return {
+      'tipo': tipo,
+      'jogadores': jogadores.join(','), // Armazenar como string
+      'pontuacao': pontuacao.join(','), // Armazenar como string
+    };
+  }
+
   static Partida fromMap(Map<String, dynamic> map) {
     return Partida(
       id: map['id'],
