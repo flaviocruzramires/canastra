@@ -28,15 +28,35 @@ class Partida {
     };
   }
 
+  static List<String> _parseJogadores(dynamic value) {
+    if (value is List) {
+      return value.map((e) => e.toString()).toList();
+    }
+    final text = value?.toString() ?? '';
+    if (text.isEmpty) return [];
+    return text.split(',').map((e) => e.trim()).toList();
+  }
+
+  static List<int> _parsePontuacao(dynamic value) {
+    if (value is List) {
+      return value
+          .map((e) => e is int ? e : int.parse(e.toString().trim()))
+          .toList();
+    }
+    final text = value?.toString() ?? '';
+    if (text.isEmpty) return [];
+    return text
+        .split(',')
+        .map((e) => int.parse(e.trim()))
+        .toList();
+  }
+
   static Partida fromMap(Map<String, dynamic> map) {
     return Partida(
-      id: map['id'],
-      tipo: map['tipo'],
-      jogadores: map['jogadores'].split(','), // Converter de string para lista
-      pontuacao: map['pontuacao']
-          .split(',')
-          .map(int.parse)
-          .toList(), // Converter de string para lista de inteiros
+      id: map['id'] as int?,
+      tipo: map['tipo'] as String,
+      jogadores: _parseJogadores(map['jogadores']),
+      pontuacao: _parsePontuacao(map['pontuacao']),
     );
   }
 }
